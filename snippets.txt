@@ -1,0 +1,16 @@
+# Powershell Command for starting with Volume mapping
+docker run -it -p 3001:3000 -v /app/node_modules -v "$(pwd):/app" b50d22e45b9e
+
+# GitBash command for starting with Volume mapping
+docker run -it -p 3002:3000 -v app/node_modules -v "/$(pwd):/app" b50d22e45b9e
+
+# Named Builders and AWS
+FROM node:alpine
+WORKDIR '/app'
+COPY package.json .
+RUN npm install
+COPY . .
+RUN npm run build
+ 
+FROM nginx
+COPY --from=0 /app/build /usr/share/nginx/html
